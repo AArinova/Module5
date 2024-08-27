@@ -6,7 +6,7 @@ class House:
     houses_history = []
 
     def __new__(cls, *args):
-        cls.houses_history.append( args[0])
+        cls.houses_history.append(args[0])
         return object.__new__(cls)
 
     def __del__(self):
@@ -40,31 +40,31 @@ class House:
         return self
 
     def __lt__(self, other):#( <),
-        if isinstance( other, int) and other > 0:
+        if isinstance( other, int):
             return self.number_of_floors < other
         elif isinstance(other, House):
             return self.number_of_floors < other.number_of_floors
 
     def __le__(self, other): #( <=),
-        if isinstance( other, int) and other > 0:
+        if isinstance( other, int):
             return self.number_of_floors <= other
         elif isinstance(other, House):
             return self.number_of_floors <= other.number_of_floors
 
     def __gt__(self, other): #( >)
-        if isinstance( other, int) and other > 0:
+        if isinstance( other, int):
             return self.number_of_floors > other
         elif isinstance(other, House):
             return self.number_of_floors > other.number_of_floors
 
     def __ge__(self, other): #( >=)
-        if isinstance( other, int) and other > 0:
+        if isinstance( other, int):
             return self.number_of_floors >= other
         elif isinstance(other, House):
             return self.number_of_floors >= other.number_of_floors
 
     def __ne__(self, other):  #( !=)
-        if isinstance( other, int) and other > 0:
+        if isinstance( other, int):
             return self.number_of_floors != other
         elif isinstance(other, House):
             return self.number_of_floors != other.number_of_floors
