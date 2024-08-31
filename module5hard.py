@@ -9,9 +9,11 @@ class Video:
     def __str__(self):
         return f'{self.title}, длительность: {self.duration}, возрастное ограничение: {self.adult_mode}'
 
-    def __repr__(self):
+    def __repr__(self): #вывод списка
         return self.__str__()
 
+    def get_name(self):
+        return self.title
 class User:
     def __init__(self, *args):
         self.nickname = args[0]  # (имя пользователя, строка),
@@ -45,6 +47,14 @@ class UrTube:
                 else:
                     self.videos.append(each)
 
+    def get_videos(self, find_word):
+        found_videos = []
+        find_word = find_word.lower()
+        for item in self.videos:
+            if find_word in item.title.lower():
+                found_videos.append(item.title)
+        return found_videos
+
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
 v2 = Video('Для чего девушкам парень программист?', 10, adult_mode=True)
@@ -54,8 +64,8 @@ ur.add(v1, v2)
 print(ur.videos)
 
 # Проверка поиска
-#print(ur.get_videos('лучший'))
-#print(ur.get_videos('ПРОГ'))
+print(ur.get_videos('лучший'))
+print(ur.get_videos('ПРОГ'))
 
 # Проверка на вход пользователя и возрастное ограничение
 # ur.watch_video('Для чего девушкам парень программист?')
