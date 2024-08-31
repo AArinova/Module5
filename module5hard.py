@@ -1,4 +1,4 @@
-
+import time
 class Video:
     def __init__(self, *args, time_now = 0, adult_mode = False):
         self.title = args[0] #(заголовок, строка),
@@ -55,24 +55,38 @@ class UrTube:
                 found_videos.append(item.title)
         return found_videos
 
+    def get_video(self, find_title): # поиск видео по названию
+        for item in self.videos:
+            if item.title == find_title:
+                return item
+            else:
+                continue
+    def watch_video(self, video_title):
+        found = self.get_video(video_title)
+        print('Идёт видео', found.title)
+        time.sleep(found.duration)
+        found.time_now = 0
+        print('Закончилось видео ', found.title)
+
+
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
 v2 = Video('Для чего девушкам парень программист?', 10, adult_mode=True)
-print(v1)
+
 # Добавление видео
 ur.add(v1, v2)
-print(ur.videos)
+print(*ur.videos)
 
 # Проверка поиска
 print(ur.get_videos('лучший'))
 print(ur.get_videos('ПРОГ'))
 
 # Проверка на вход пользователя и возрастное ограничение
-# ur.watch_video('Для чего девушкам парень программист?')
-# ur.register('vasya_pupkin', 'lolkekcheburek', 13)
-# ur.watch_video('Для чего девушкам парень программист?')
-# ur.register('urban_pythonist', 'iScX4vIJClb9YQavjAgF', 25)
-# ur.watch_video('Для чего девушкам парень программист?')
+ur.watch_video('Для чего девушкам парень программист?')
+ur.register('vasya_pupkin', 'lolkekcheburek', 13)
+ur.watch_video('Для чего девушкам парень программист?')
+ur.register('urban_pythonist', 'iScX4vIJClb9YQavjAgF', 25)
+ur.watch_video('Для чего девушкам парень программист?')
 
 # Проверка входа в другой аккаунт
 ur.register('vasya_pupkin', 'F8098FM8fjm9jmi', 55)
