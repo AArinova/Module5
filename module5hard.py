@@ -9,6 +9,9 @@ class Video:
     def __str__(self):
         return f'{self.title}, длительность: {self.duration}, возрастное ограничение: {self.adult_mode}'
 
+    def __repr__(self):
+        return self.__str__()
+
 class User:
     def __init__(self, *args):
         self.nickname = args[0]  # (имя пользователя, строка),
@@ -41,7 +44,6 @@ class UrTube:
                     print('Уже есть видео с таким названием.')
                 else:
                     self.videos.append(each)
-                    #print(each)
 
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
