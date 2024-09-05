@@ -63,11 +63,13 @@ class UrTube:
                 continue
     def watch_video(self, video_title):
         found = self.get_video(video_title)
-        print('Идёт видео', found.title)
-        time.sleep(found.duration)
+        print(f'Идёт видео \'{found.title}\'.')
+        for i_time in range(0, found.duration):
+            print(f"Идёт {i_time} секунда видео.")
+            time.sleep(i_time)
         found.time_now = 0
-        print('Закончилось видео ', found.title)
-
+        print(self)
+        print(f'Закончилось видео \"{found.title}\".')
 
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
