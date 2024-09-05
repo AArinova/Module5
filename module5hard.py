@@ -17,28 +17,52 @@ class Video:
 class User:
     def __init__(self, *args):
         self.nickname = args[0]  # (имя пользователя, строка),
-        self.password = args[1]  # (в хэшированном виде, число),
+        self.password = args[1]
         self.age = args[2] #(возраст, число)
 
     def __str__(self):
         return f'Пользователь: {self.nickname}, пароль: {self.password} возраст: {self.age}'
 
+    def __eq__(self, other):
+        if( isinstance( other, User)):
+            self.nickname = other.nickname
+            self.age = other.password
+            self.age = other.age
+        return self
+
 class UrTube:
 
-    users = []  # (список  объектов User),
-    videos = []  # (список объектов Video),
+    users = []  # список  объектов User)
+    videos = []  # список объектов Video)
+    current_user = None
 
     def __str__(self):
         return self.current_user
+
     def register( self, nick_name, password, age):
         if nick_name in self.users:
             print(f"Пользователь {nick_name} уже существует")
         else:
             new_user = User(nick_name, password, age)
             self.users.append(new_user)
-            self.current_user = new_user
+            #self.current_user = new_user
+            self.log_in(nick_name, password)
         return self
 
+    def log_in(self, nickname, password):
+        is_found = False
+        for each in self.users:
+            if nickname == each.nickname and password == each.password:
+                is_found = True
+                self.current_user = each
+                break
+            else:
+                continue
+        if is_found == False:
+            print(f'Пользователь {nickname} не существует!')
+
+    def log_out(self):
+        self.current_user = None
     def add(self, *args):
         for each in args:
             if isinstance(each, Video):
@@ -56,20 +80,32 @@ class UrTube:
         return found_videos
 
     def get_video(self, find_title): # поиск видео по названию
+        is_found = False
         for item in self.videos:
             if item.title == find_title:
+                is_found = True
                 return item
             else:
                 continue
+        if is_found == False:
+            return None
     def watch_video(self, video_title):
-        found = self.get_video(video_title)
-        print(f'Идёт видео \'{found.title}\'.')
-        for i_time in range(0, found.duration):
-            print(f"Идёт {i_time} секунда видео.")
-            time.sleep(i_time)
-        found.time_now = 0
-        print(self)
-        print(f'Закончилось видео \"{found.title}\".')
+        if self.current_user == None:
+            print('Войдите в аккаунт, чтобы смотреть видео.')
+        else:
+            found = self.get_video(video_title)
+            if found != None:
+                if found.adult_mode and self.current_user.age < 18:
+                    print( self.current_user.nickname, 'Вам нет 18 лет, пожалуйста покиньте страницу')
+                else:
+                    print(f'Идёт видео \'{found.title}\'.')
+                    for i_time in range(0, found.duration):
+                        print(f"Идёт {i_time} секунда видео.")
+                        time.sleep(i_time)
+                    found.time_now = 0
+                    print(f'Конец видео \"{found.title}\".')
+            else:
+                print('Нет такого видео.')
 
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
@@ -86,6 +122,7 @@ print(ur.get_videos('ПРОГ'))
 # Проверка на вход пользователя и возрастное ограничение
 ur.watch_video('Для чего девушкам парень программист?')
 ur.register('vasya_pupkin', 'lolkekcheburek', 13)
+print(ur.current_user)
 ur.watch_video('Для чего девушкам парень программист?')
 ur.register('urban_pythonist', 'iScX4vIJClb9YQavjAgF', 25)
 ur.watch_video('Для чего девушкам парень программист?')
@@ -94,5 +131,11 @@ ur.watch_video('Для чего девушкам парень программи
 ur.register('vasya_pupkin', 'F8098FM8fjm9jmi', 55)
 print(ur.current_user)
 
-# Попытка воспроизведения несуществующего видео
-#ur.watch_video('Лучший язык программирования 2024 года!')
+#Тестирование методов log_in, log_out
+# ur.log_in('musya_pupkina', 'F8098FM8fjm9jmi2')
+# print('\nСейчас пользователь: ',ur.current_user)
+# ur.log_out()
+# print('\nСейчас пользователь: ',ur.current_user)
+
+#Попытка воспроизведения несуществующего видео
+ur.watch_video('Лучший язык программирования 2024 года!')
