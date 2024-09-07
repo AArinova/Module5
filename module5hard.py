@@ -12,6 +12,7 @@ class Video:
     def get_name(self):
         return self.title
 class User:
+
     def __init__(self, *args):
         self.nickname = args[0]  # (имя пользователя, строка),
         self.password = args[1]
@@ -22,7 +23,6 @@ class User:
 
     def get_nick(self):
         return self.nickname
-
 class UrTube:
 
     users = []  # список  объектов User)
