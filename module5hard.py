@@ -9,9 +9,6 @@ class Video:
     def __str__(self):
         return f'{self.title}, длительность: {self.duration}, возрастное ограничение: {self.adult_mode}'
 
-    def __repr__(self): #вывод списка
-        return self.__str__()
-
     def get_name(self):
         return self.title
 class User:
@@ -21,14 +18,8 @@ class User:
         self.age = args[2] #(возраст, число)
 
     def __str__(self):
-        return f'Пользователь: {self.nickname}, пароль: {self.password} возраст: {self.age}'
+        return f'Пользователь: {self.nickname}' # , пароль: {self.password} возраст: {self.age}'
 
-    def __eq__(self, other):
-        if( isinstance( other, User)):
-            if self.nickname == other.nickname and self.age == other.password and self.age == other.age:
-                return True
-            else:
-                return False
     def get_nick(self):
         return self.nickname
 
@@ -40,14 +31,11 @@ class UrTube:
 
     def __str__(self):
         return self.current_user
-
-    def register( self, nick_name, password, age):
-        nick_list = []
-        for each in self.users:
-            nick_list.append(each.get_nick())
-        #print('Ники', nick_list )
-        if nick_name in nick_list:
-            print(f"Пользователь {nick_name} уже существует")
+    def register(self, nick_name, password, age):
+        for user in self.users:
+            if user.nickname == nick_name:
+                print(f"Пользователь {nick_name} уже существует")
+                break
         else:
             new_user = User(nick_name, password, age)
             self.users.append(new_user)
@@ -72,7 +60,7 @@ class UrTube:
     def add(self, *args):
         for each in args:
             if isinstance(each, Video):
-                if each in self.videos:
+                if any(video.title == each.title for video in self.videos):
                     print('Уже есть видео с таким названием.')
                 else:
                     self.videos.append(each)
@@ -102,16 +90,14 @@ class UrTube:
             found = self.get_video(video_title)
             if found != None:
                 if found.adult_mode and self.current_user.age < 18:
-                    print( self.current_user.nickname, 'Вам нет 18 лет, пожалуйста покиньте страницу')
+                    print(f'Дорогой(-ая), {self.current_user.nickname}, Вам нет 18 лет, пожалуйста покиньте страницу.')
                 else:
                     print(f'Идёт видео \'{found.title}\'.')
-                    for i_time in range(0, found.duration):
-                        print(f"Идёт {i_time} секунда видео.")
+                    for second in range(found.time_now, found.duration):
+                        print(f'\rИдёт {second} секунда видео.', end='')
                         time.sleep(1)
                     found.time_now = 0
-                    print(f'Конец видео \"{found.title}\".')
-            else:
-                print('Нет такого видео.')
+                    print(f'\nКонец видео \"{found.title}\".')
 
 ur = UrTube()
 v1 = Video('Лучший язык программирования 2024 года', 200)
@@ -119,7 +105,6 @@ v2 = Video('Для чего девушкам парень программист
 
 # Добавление видео
 ur.add(v1, v2)
-print(*ur.videos)
 
 # Проверка поиска
 print(ur.get_videos('лучший'))
