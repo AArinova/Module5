@@ -25,10 +25,12 @@ class User:
 
     def __eq__(self, other):
         if( isinstance( other, User)):
-            self.nickname = other.nickname
-            self.age = other.password
-            self.age = other.age
-        return self
+            if self.nickname == other.nickname and self.age == other.password and self.age == other.age:
+                return True
+            else:
+                return False
+    def get_nick(self):
+        return self.nickname
 
 class UrTube:
 
@@ -40,13 +42,17 @@ class UrTube:
         return self.current_user
 
     def register( self, nick_name, password, age):
-        if nick_name in self.users:
+        nick_list = []
+        for each in self.users:
+            nick_list.append(each.get_nick())
+        #print('Ники', nick_list )
+        if nick_name in nick_list:
             print(f"Пользователь {nick_name} уже существует")
         else:
             new_user = User(nick_name, password, age)
             self.users.append(new_user)
-            #self.current_user = new_user
-            self.log_in(nick_name, password)
+            self.current_user = new_user
+
         return self
 
     def log_in(self, nickname, password):
@@ -101,7 +107,7 @@ class UrTube:
                     print(f'Идёт видео \'{found.title}\'.')
                     for i_time in range(0, found.duration):
                         print(f"Идёт {i_time} секунда видео.")
-                        time.sleep(i_time)
+                        time.sleep(1)
                     found.time_now = 0
                     print(f'Конец видео \"{found.title}\".')
             else:
